@@ -1,0 +1,27 @@
+{
+  "name": "reactive_component_manager",
+  "version": "1.0.0",
+  "description": "A libary to handle reactive code with RxJs and View Model controller",
+  "main": "index.cjs",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Tristan Wolf",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tristar123456/event_manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tristar123456/event_manager/issues"
+  },
+  "homepage": "https://github.com/tristar123456/event_manager#readme",
+  "dependencies": {
+    "rxjs": "^7.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.0"
+  }
+}
