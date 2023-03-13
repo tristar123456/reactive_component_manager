@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "declaration": true,
+        "outDir": "dist",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "module": "es2015",
+        "target": "es2015",
+        "lib": ["es2018", "dom"],
+        "strict": true
+    },
+	"exclude": [
+		"node_modules"
+	]
+}
