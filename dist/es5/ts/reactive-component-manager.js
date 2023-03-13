@@ -25,9 +25,9 @@ var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
 var ReactiveComponentManager = /** @class */ (function () {
     function ReactiveComponentManager() {
-        this._events = {};
-        this._registerEvent$ = new rxjs_1.ReplaySubject(1);
-        this.listeners = this._registerEvent$.pipe((0, operators_1.map)(function (listeners) { return Object.entries(listeners); }), (0, rxjs_1.switchMap)(function (listenersList) { return (0, rxjs_1.combineLatest)(listenersList.map(function (nameAndListener) { return nameAndListener[1].onEvent.pipe((0, rxjs_1.startWith)(undefined)); }))
+        this._sourcesAndListener = {};
+        this._registerSourceAndListener$ = new rxjs_1.ReplaySubject(1);
+        this._listeners = this._registerSourceAndListener$.pipe((0, operators_1.map)(function (listeners) { return Object.entries(listeners); }), (0, rxjs_1.switchMap)(function (listenersList) { return (0, rxjs_1.combineLatest)(listenersList.map(function (nameAndListener) { var _a; return ((_a = nameAndListener[1]) === null || _a === void 0 ? void 0 : _a.listener) ? nameAndListener[1].listener.pipe((0, rxjs_1.startWith)(undefined)) : nameAndListener[1].source; }))
             .pipe((0, operators_1.map)(function (args) {
             var names = listenersList.map(function (nameAndListener) { return nameAndListener[0]; });
             return __assign({}, Object.assign.apply(Object, __spreadArray([{}], args.map(function (listener, index) {
@@ -36,17 +36,46 @@ var ReactiveComponentManager = /** @class */ (function () {
             }), false)));
         })); }), (0, rxjs_1.shareReplay)());
     }
-    ReactiveComponentManager.prototype.register = function (name, onEvent) {
+    ReactiveComponentManager.prototype.register = function (sources, listeners) {
+        var _this = this;
+        Object.entries(sources).map(function (source) { return _this.registerSource(source[0], source[1]); });
+        listeners && Object.entries(listeners).map(function (listener) { return _this.registerListener(listener[0], listener[1]); });
+        return this.getAllListeners();
+    };
+    /**
+     * @description Registers a new Listener to an empty Subject
+     * @returns source: ReplaySubject<T>
+     */
+    ReactiveComponentManager.prototype.registerListener = function (name, listener) {
         var subject = new rxjs_1.ReplaySubject(1);
-        this._events[name] = { obs: subject, onEvent: onEvent ? onEvent(subject) : subject.asObservable() };
-        this._registerEvent$.next(__assign({}, this._events));
+        this._sourcesAndListener[name] = {
+            source: subject,
+            listener: listener ? listener(subject) : subject.asObservable()
+        };
+        this._registerSourceAndListener$.next(__assign({}, this._sourcesAndListener));
         return subject;
     };
-    ReactiveComponentManager.prototype.get = function (name) {
-        return this._events[name].onEvent;
+    /**
+     * @description Registers a source observable as listener
+     * @returns source: Observable<T>
+     */
+    ReactiveComponentManager.prototype.registerSource = function (name, subscribeOn) {
+        this._sourcesAndListener[name] = { source: subscribeOn, listener: undefined };
+        this._registerSourceAndListener$.next(__assign({}, this._sourcesAndListener));
+        return subscribeOn;
+    };
+    ReactiveComponentManager.prototype.getListener = function (name) {
+        var _a, _b;
+        return (_b = (_a = this._sourcesAndListener[name]) === null || _a === void 0 ? void 0 : _a.listener) !== null && _b !== void 0 ? _b : this._sourcesAndListener[name].source;
     };
     ReactiveComponentManager.prototype.getSource = function (name) {
-        return this._events[name].obs;
+        if (this._sourcesAndListener[name].listener !== undefined)
+            return this._sourcesAndListener[name].source;
+        else
+            throw new Error('The requested instance does only provide a listener');
+    };
+    ReactiveComponentManager.prototype.getAllListeners = function () {
+        return this._listeners;
     };
     ReactiveComponentManager.prototype.next = function (name, value) {
         this.getSource(name).next(value);

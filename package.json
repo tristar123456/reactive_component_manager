@@ -6,7 +6,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npx tsc",
+    "build": "rm -rf ./dist && npx tsc && tsc -p tsconfig.es5.json",
     "build:es5": "tsc -p tsconfig.es5.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
