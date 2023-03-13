@@ -11,9 +11,10 @@ export class ReactiveComponentManager {
         }))), shareReplay());
     }
     register(name, onEvent) {
-        let obs = new ReplaySubject(1);
-        this._events[name] = { obs, onEvent: onEvent ? onEvent(obs) : obs };
+        let subject = new ReplaySubject(1);
+        this._events[name] = { obs: subject, onEvent: onEvent ? onEvent(subject) : subject.asObservable() };
         this._registerEvent$.next(Object.assign({}, this._events));
+        return subject;
     }
     get(name) {
         return this._events[name].onEvent;

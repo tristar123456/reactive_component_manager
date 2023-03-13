@@ -1,6 +1,6 @@
 {
   "name": "reactive-component-manager",
-  "version": "1.1.0",
+  "version": "1.2.2",
   "description": "A libary to handle reactive code with RxJs and View Model controller",
   "main": "dist/es5/index.js",
   "module": "dist/index.js",

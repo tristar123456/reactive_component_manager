@@ -37,9 +37,10 @@ var ReactiveComponentManager = /** @class */ (function () {
         })); }), (0, rxjs_1.shareReplay)());
     }
     ReactiveComponentManager.prototype.register = function (name, onEvent) {
-        var obs = new rxjs_1.ReplaySubject(1);
-        this._events[name] = { obs: obs, onEvent: onEvent ? onEvent(obs) : obs };
+        var subject = new rxjs_1.ReplaySubject(1);
+        this._events[name] = { obs: subject, onEvent: onEvent ? onEvent(subject) : subject.asObservable() };
         this._registerEvent$.next(__assign({}, this._events));
+        return subject;
     };
     ReactiveComponentManager.prototype.get = function (name) {
         return this._events[name].onEvent;
