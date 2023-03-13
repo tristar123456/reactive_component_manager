@@ -1,6 +1,6 @@
 {
   "name": "reactive-component-manager",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A libary to handle reactive code with RxJs and View Model controller",
   "main": "dist/es5/index.js",
   "module": "dist/index.js",
@@ -15,12 +15,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tristar123456/event_manager.git"
+    "url": "git+https://github.com/tristar123456/reactive_component_manager.git"
   },
   "bugs": {
-    "url": "https://github.com/tristar123456/event_manager/issues"
+    "url": "https://github.com/tristar123456/reactive_component_manager/issues"
   },
-  "homepage": "https://github.com/tristar123456/event_manager#readme",
+  "homepage": "https://github.com/tristar123456/reactive_component_manager#readme",
   "dependencies": {
     "rxjs": "^7.8.0"
   },
