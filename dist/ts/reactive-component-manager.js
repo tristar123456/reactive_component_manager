@@ -1,5 +1,4 @@
-import { combineLatest, ReplaySubject, shareReplay, startWith, switchMap } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { combineLatest, ReplaySubject, shareReplay, startWith, switchMap, map } from 'rxjs';
 export class ReactiveComponentManager {
     constructor() {
         this._sourcesAndListener = {};
@@ -23,7 +22,7 @@ export class ReactiveComponentManager {
         let subject = new ReplaySubject(1);
         this._sourcesAndListener[name] = {
             source: subject,
-            listener: listener ? listener(subject) : subject.asObservable()
+            listener: listener(subject)
         };
         this._registerSourceAndListener$.next(Object.assign({}, this._sourcesAndListener));
         return subject;

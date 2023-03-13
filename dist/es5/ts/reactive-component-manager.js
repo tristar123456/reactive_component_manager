@@ -22,13 +22,12 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReactiveComponentManager = void 0;
 var rxjs_1 = require("rxjs");
-var operators_1 = require("rxjs/operators");
 var ReactiveComponentManager = /** @class */ (function () {
     function ReactiveComponentManager() {
         this._sourcesAndListener = {};
         this._registerSourceAndListener$ = new rxjs_1.ReplaySubject(1);
-        this._listeners = this._registerSourceAndListener$.pipe((0, operators_1.map)(function (listeners) { return Object.entries(listeners); }), (0, rxjs_1.switchMap)(function (listenersList) { return (0, rxjs_1.combineLatest)(listenersList.map(function (nameAndListener) { var _a; return ((_a = nameAndListener[1]) === null || _a === void 0 ? void 0 : _a.listener) ? nameAndListener[1].listener.pipe((0, rxjs_1.startWith)(undefined)) : nameAndListener[1].source; }))
-            .pipe((0, operators_1.map)(function (args) {
+        this._listeners = this._registerSourceAndListener$.pipe((0, rxjs_1.map)(function (listeners) { return Object.entries(listeners); }), (0, rxjs_1.switchMap)(function (listenersList) { return (0, rxjs_1.combineLatest)(listenersList.map(function (nameAndListener) { var _a; return ((_a = nameAndListener[1]) === null || _a === void 0 ? void 0 : _a.listener) ? nameAndListener[1].listener.pipe((0, rxjs_1.startWith)(undefined)) : nameAndListener[1].source; }))
+            .pipe((0, rxjs_1.map)(function (args) {
             var names = listenersList.map(function (nameAndListener) { return nameAndListener[0]; });
             return __assign({}, Object.assign.apply(Object, __spreadArray([{}], args.map(function (listener, index) {
                 var _a;
@@ -50,7 +49,7 @@ var ReactiveComponentManager = /** @class */ (function () {
         var subject = new rxjs_1.ReplaySubject(1);
         this._sourcesAndListener[name] = {
             source: subject,
-            listener: listener ? listener(subject) : subject.asObservable()
+            listener: listener(subject)
         };
         this._registerSourceAndListener$.next(__assign({}, this._sourcesAndListener));
         return subject;
