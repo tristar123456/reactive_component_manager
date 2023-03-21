@@ -22,8 +22,8 @@ export class ReactiveComponentManagerService {
       shareReplay()
   )
 
-  register<T, S>(sources: { [name: string]: Observable<T> }, listeners?: { [name: string]: (obs: Observable<T>) => Observable<S> }): Observable<{ [name: string]: [value: T] }> {
-    Object.entries(sources).map((source:[string, Observable<T>]) => this.registerSource(source[0], source[1]));
+  register(sources?: { [name: string]: Observable<string | number | boolean | object | any> }, listeners?: { [name: string]: (obs: Observable<string | number | boolean | object | any>) => Observable<any> }): Observable<{ [name: string]: [value: string | number | boolean | object | any] }> {
+    sources && Object.entries(sources).map((source:[string, Observable<string | number | boolean | object | any>]) => this.registerSource(source[0], source[1]));
     listeners && Object.entries(listeners).map((listener) => this.registerListener(listener[0], listener[1]));
     return this.getAllListeners();
   }
