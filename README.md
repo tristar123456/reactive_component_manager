@@ -18,8 +18,8 @@ or if you just want to add a observable, to be listened to:
 ### Emitting new Events
 You can choose each listener by name:
 `rcm.getListener('listenerName')`
-and then using 
-`.next(listenerValue)` 
+and then using
+`.next(listenerValue)`
 to emit a new Value
 
 ### Working example
